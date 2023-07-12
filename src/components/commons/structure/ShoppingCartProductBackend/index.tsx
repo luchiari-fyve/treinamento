@@ -44,8 +44,9 @@ export const ShoppingCartProductBackend: React.FC<Props> = ({ order }) => {
 
   async function updateProductQuantity(qtt: number) {
     console.log(qtt)
+
     const newProduct = { ...order, productQuantity: qtt }
-    await addProductInCart(newProduct)
+    // await addProductInCart(newProduct)
   }
 
   function removeProduct() {

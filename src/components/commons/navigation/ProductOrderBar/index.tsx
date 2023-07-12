@@ -18,9 +18,12 @@ import { calculateDiscountIfExists } from '@utils/functions/products/calculateDi
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { addProductInCart } from '@services/api/routes/products/addProductInCart'
 import { ICartProductBackend } from '@services/api/routes/products/getProductsInCart/types'
+import { ActivityIndicator } from 'react-native'
 
 export const ProductOrderBar: React.FC = () => {
   const { params } = useRoute<ProductScreenRouteProp>()
+  const [isLoading, setIsLoading] = useState(false)
+
   const [counter, setCounter] = useState(1)
 
   const cartContext = useCartContext()
@@ -40,6 +43,13 @@ export const ProductOrderBar: React.FC = () => {
     }
   }
 
+  function handleAddButton() {
+    if (isLoading) {
+      return 'loading'
+    }
+    return 'Adicionar'
+  }
+
   async function handleProductAddition() {
     try {
       const cartProduct: ICartProductBackend = {
@@ -55,13 +65,15 @@ export const ProductOrderBar: React.FC = () => {
 
       // cartContext.addProduct(cartProduct, counter)
       // console.log(cartProduct.selectedSize)
-
+      setIsLoading(true)
       // Request
       const response = await addProductInCart(cartProduct)
       console.log(response)
       navigation.navigate('Home')
     } catch (e) {
       console.log('[handleProductAddition]: ', e)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -74,7 +86,7 @@ export const ProductOrderBar: React.FC = () => {
         icon2={<PlusSVG />}
       />
       <AddProduct
-        buttonLabel="Adicionar"
+        buttonLabel={handleAddButton()}
         price={handledPrice * counter}
         onPress={handleProductAddition}
       />

@@ -116,9 +116,9 @@ export const Home: React.FC = navigation => {
           ({data.length} produtos)
         </Typography>
 
-        <Typography variant="b3" color={theme.colors.textSecondary}>
+        {/* <Typography variant="b3" color={theme.colors.textSecondary}>
           Visualizar todos
-        </Typography>
+        </Typography> */}
       </ContainerProductsTitle>
 
       <ContainerProducts>{renderContent()}</ContainerProducts>

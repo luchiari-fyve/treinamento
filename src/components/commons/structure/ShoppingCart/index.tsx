@@ -13,17 +13,18 @@ import { calculateDiscountIfExists } from '@utils/functions/products/calculateDi
 import { useNavigation } from '@react-navigation/native'
 import { NavigationProps } from '@routes/types/navigationProps'
 import { getProductsInCart } from '@services/api/routes/products/getProductsInCart'
+import { ICartProductBackend } from '@services/api/routes/products/getProductsInCart/types'
 
 export const ShoppingCart: React.FC = () => {
   const cartContext = useCartContext()
 
   const navigation = useNavigation<NavigationProps>()
 
-  const [myCart, setMyCart] = useState([])
+  const [myCart, setMyCart] = useState<ICartProductBackend[]>([])
 
   async function fetchProductsInCart() {
-    const cart = await getProductsInCart('17')
-
+    const response = await getProductsInCart('17')
+    const cart = response.products
     setMyCart(cart)
   }
 
@@ -33,17 +34,22 @@ export const ShoppingCart: React.FC = () => {
 
   function getNumberOfProducts() {
     let counter = 0
-    for (let i = 0; i < cartContext.listProducts.length; i++) {
-      counter += cartContext.listProducts[i].quantity
-    }
+
+    myCart.forEach(item => {
+      counter += item.productQuantity
+    })
+
     return counter
   }
 
   function getTotalPriceOfProducts() {
     let totalPrice = 0
-    cartContext.listProducts.forEach(product => {
-      totalPrice += calculateDiscountIfExists(product) * product.quantity
+    myCart.forEach(item => {
+      totalPrice += item.price * item.productQuantity
     })
+    // cartContext.listProducts.forEach(product => {
+    //   totalPrice += calculateDiscountIfExists(product) * product.quantity
+    // })
     return totalPrice
   }
 

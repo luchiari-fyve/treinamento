@@ -6,7 +6,6 @@ import React from 'react'
 // Styles
 import { Container } from './styles'
 import { Typography } from '@components/toolkit/Typography'
-import theme from '@global/theme'
 
 interface Props {
   text: string

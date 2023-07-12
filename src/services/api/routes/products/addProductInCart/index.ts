@@ -1,5 +1,4 @@
 import { API } from '@services/api'
-import { ICartProduct } from '@services/types/cartProduct'
 import { ICartProductBackend } from '../getProductsInCart/types'
 import { IResponse } from './types'
 

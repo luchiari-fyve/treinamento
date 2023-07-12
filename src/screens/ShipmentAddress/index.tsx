@@ -57,7 +57,7 @@ export const ShipmentAddress: React.FC = () => {
             name="cep"
             placeholder="CEP"
             defaultValue={cep}
-            onChangeText={newCep => setCep(newCep)}
+            onChangeText={(newCep: string) => setCep(newCep)}
             onSubmit={handleCep()}
           />
         </FormField>
