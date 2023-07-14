@@ -27,7 +27,12 @@ export const ShipmentAddress: React.FC = () => {
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
 
-  async function handleCep() {
+  function handleCepChange(value: string) {
+    setCep(value)
+    handleCep(value)
+  }
+
+  async function handleCep(cep: string) {
     try {
       if (cep.length === 8) {
         const returnedAddress = await getAddressByCep(cep)
@@ -36,8 +41,6 @@ export const ShipmentAddress: React.FC = () => {
         setNeighborhood(returnedAddress.address.neighborhood)
         setCity(returnedAddress.address.city)
         setState(returnedAddress.address.state)
-
-        console.log(await getAddressByCep('13566590'))
       }
     } catch (e) {
       Alert.alert('Erro: ', 'Opa! A requisição deu algum erro.')
@@ -57,8 +60,7 @@ export const ShipmentAddress: React.FC = () => {
             name="cep"
             placeholder="CEP"
             defaultValue={cep}
-            onChangeText={(newCep: string) => setCep(newCep)}
-            onSubmit={handleCep()}
+            onChangeText={handleCepChange}
           />
         </FormField>
 

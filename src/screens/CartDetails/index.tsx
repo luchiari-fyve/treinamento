@@ -1,5 +1,5 @@
 // External Libraries
-import React, { useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
 
 // Components
 
@@ -18,20 +18,26 @@ import { ICartProductBackend } from '@services/api/routes/products/getProductsIn
 import { getProductsInCart } from '@services/api/routes/products/getProductsInCart'
 import { Typography } from '@components/toolkit/Typography'
 import { ShoppingCartProductBackend } from '@components/structure/ShoppingCartProductBackend'
+import { USER_ID } from '@utils/constants/user'
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
+import { LoadingProduct } from '@components/structure/LoadingProduct'
+import Animated, {
+  FadeIn,
+  FadeOutLeft,
+  FadeOutRight,
+  SlideOutRight
+} from 'react-native-reanimated'
+import { updateProductInCart } from '@services/api/routes/products/updateProductQuantity'
 
 export const CartDetails: React.FC = navigation => {
-  // const { params } = useRoute<ProductScreenRouteProp>()
   const [data, setData] = useState<ICartProductBackend[]>([])
   const [isLoading, setIsLoading] = useState(false)
-
-  const cartContext = useCartContext()
 
   async function fetchAllProductsInCart() {
     try {
       setIsLoading(true)
-      const response = await getProductsInCart('17')
+      const response = await getProductsInCart(USER_ID)
       setData(response.products)
-      // console.log('DATA: ', data)
     } catch (e) {
       Alert.alert('Erro: ', 'Algo deu errado!')
     } finally {
@@ -49,7 +55,7 @@ export const CartDetails: React.FC = navigation => {
         </Message>
       )
     } else if (!data.length && isLoading) {
-      return <ActivityIndicator size={'large'} />
+      return renderLoadingItems()
     }
 
     return (
@@ -61,14 +67,35 @@ export const CartDetails: React.FC = navigation => {
     )
   }
 
+  function renderLoadingItems() {
+    const listOfLoadingItems: Array<ReactElement> = []
+    for (let i = 0; i < 3; i++) {
+      listOfLoadingItems.push(<LoadingProduct />)
+    }
+    return listOfLoadingItems
+  }
+
   function renderItem({ item }: ListRenderItemInfo<ICartProductBackend>) {
-    return <ShoppingCartProductBackend order={item} />
+    return (
+      <Animated.View entering={FadeIn.delay(150)} exiting={FadeOutRight}>
+        <ShoppingCartProductBackend order={item} />
+      </Animated.View>
+    )
   }
 
   function keyExtractor(item: ICartProductBackend) {
     return item.idProduct
   }
 
+  async function removeAllItems() {
+    for (let i = 0; i < data.length; i++) {
+      const removingProduct = { ...data[i], productQuantity: 0 }
+      await updateProductInCart(removingProduct)
+    }
+    setData([])
+  }
+
+  // Conserta isso aqui
   useEffect(() => {
     fetchAllProductsInCart()
   }, [])
@@ -82,7 +109,7 @@ export const CartDetails: React.FC = navigation => {
             text="Limpar"
             textColor={theme.colors.textSecondary}
             bgColor="white"
-            onPress={cartContext.clearProducts}
+            onPress={removeAllItems}
           />
         }
       />

@@ -7,7 +7,7 @@ export const Container = styled.View`
   justify-content: space-around;
   width: 100%;
   position: absolute;
-  padding: 7%;
+  padding: 6.5%;
   bottom: 0;
   height: auto;
 

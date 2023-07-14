@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native'
 import { NavigationProps } from '@routes/types/navigationProps'
 import { getProductsInCart } from '@services/api/routes/products/getProductsInCart'
 import { ICartProductBackend } from '@services/api/routes/products/getProductsInCart/types'
+import { USER_ID } from '@utils/constants/user'
 
 export const ShoppingCart: React.FC = () => {
   const cartContext = useCartContext()
@@ -23,7 +24,7 @@ export const ShoppingCart: React.FC = () => {
   const [myCart, setMyCart] = useState<ICartProductBackend[]>([])
 
   async function fetchProductsInCart() {
-    const response = await getProductsInCart('17')
+    const response = await getProductsInCart(USER_ID)
     const cart = response.products
     setMyCart(cart)
   }

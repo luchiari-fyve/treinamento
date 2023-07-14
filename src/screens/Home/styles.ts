@@ -51,6 +51,7 @@ export const BottomBar = styled.View`
   bottom: 0;
   flex-direction: column;
   justify-content: space-between;
+  background-color: beige;
 `
 export const Message = styled.View`
   height: 10%;

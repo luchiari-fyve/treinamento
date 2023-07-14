@@ -11,19 +11,25 @@ import { FlatList } from 'react-native-gesture-handler'
 import { Dimensions, Image } from 'react-native'
 
 export const ProductImagesCarousel: React.FC = () => {
-  const { params } = useRoute<ProductScreenRouteProp>()
+  // Dimensions
   const windowHeight = Dimensions.get('window').height
   const windowWidth = Dimensions.get('window').width
 
+  // Hooks
+  const { params } = useRoute<ProductScreenRouteProp>()
+
+  // States
   const [image, setImage] = useState(params.product.mainImageUrl)
 
+  // Functions
   function handleImageClick(item: any) {
     setImage(item)
   }
 
   function renderSize({ item }: any) {
+    const handleImageClickWithItem = handleImageClick.bind(item)
     return (
-      <SizeContainer activeOpacity={0.6} onPress={() => handleImageClick(item)}>
+      <SizeContainer activeOpacity={0.6} onPress={handleImageClickWithItem}>
         <Image
           source={{
             uri: item

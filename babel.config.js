@@ -21,6 +21,7 @@ module.exports = {
           '@global': './src/global'
         }
       }
-    ]
+    ],
+    'react-native-reanimated/plugin'
   ]
 }

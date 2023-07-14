@@ -13,12 +13,14 @@ interface Props {
   buttonLabel: string
   price: number
   onPress: () => void
+  disabled?: boolean
 }
 
 export const AddProduct: React.FC<Props> = ({
   buttonLabel,
   price,
-  onPress
+  onPress,
+  disabled
 }) => {
   const [quantity] = useState(1)
 
@@ -41,7 +43,7 @@ export const AddProduct: React.FC<Props> = ({
   }
 
   return (
-    <Container activeOpacity={0.6} onPress={onPress}>
+    <Container disabled={disabled} activeOpacity={0.6} onPress={onPress}>
       {checkIfIsLoading()}
     </Container>
   )

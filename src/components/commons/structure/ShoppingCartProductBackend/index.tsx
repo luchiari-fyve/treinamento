@@ -18,6 +18,7 @@ import TrashCanSVG from '@assets/icons/TrashCanSVG'
 import { useCartContext } from '@contexts/useCartContext'
 import { ICartProductBackend } from '@services/api/routes/products/getProductsInCart/types'
 import { addProductInCart } from '@services/api/routes/products/addProductInCart'
+import { updateProductInCart } from '@services/api/routes/products/updateProductQuantity'
 
 interface Props {
   order: ICartProductBackend
@@ -27,7 +28,7 @@ export const ShoppingCartProductBackend: React.FC<Props> = ({ order }) => {
   const cartContext = useCartContext()
   const [counter, setCounter] = useState(order.productQuantity)
 
-  function handleQuantityChange(type: 'add' | 'remove') {
+  async function handleQuantityChange(type: 'add' | 'remove') {
     setCounter((prevCounter: number) => {
       let newCounter
 
@@ -46,11 +47,12 @@ export const ShoppingCartProductBackend: React.FC<Props> = ({ order }) => {
     console.log(qtt)
 
     const newProduct = { ...order, productQuantity: qtt }
-    // await addProductInCart(newProduct)
+    await updateProductInCart(newProduct)
   }
 
-  function removeProduct() {
-    cartContext.removeProductById(order.idProduct)
+  async function removeProduct() {
+    const newProduct = { ...order, productQuantity: 0 }
+    await updateProductInCart(newProduct)
   }
 
   return (

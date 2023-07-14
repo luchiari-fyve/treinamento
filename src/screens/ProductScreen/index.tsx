@@ -1,5 +1,5 @@
 // External Libraries
-import React from 'react'
+import React, { useState } from 'react'
 
 // Components
 
@@ -21,6 +21,8 @@ export const ProductScreen: React.FC = navigation => {
   const { params } = useRoute<ProductScreenRouteProp>()
   const navigate = useNavigation<NavigationProps>()
   const insets = useSafeAreaInsets()
+
+  const [selectedSize, setSelectedSize] = useState('')
 
   return (
     <Container>
@@ -50,10 +52,10 @@ export const ProductScreen: React.FC = navigation => {
           {params.product.desc}
         </Typography>
 
-        <SizeCarousel />
+        <SizeCarousel chosenSize={selectedSize} onChange={setSelectedSize} />
       </Description>
 
-      <ProductOrderBar />
+      <ProductOrderBar size={selectedSize} />
     </Container>
   )
 }

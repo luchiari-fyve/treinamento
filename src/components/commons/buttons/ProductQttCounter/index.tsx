@@ -21,11 +21,18 @@ export const ProductQttCounter: React.FC<Props> = ({
   icon1,
   icon2
 }) => {
+  function handleAddPress() {
+    onChange('add')
+  }
+
+  function handleRemovePress() {
+    onChange('remove')
+  }
   return (
     <Container>
-      <Counter onPress={() => onChange('remove')}>{icon1}</Counter>
+      <Counter onPress={handleRemovePress}>{icon1}</Counter>
       <Typography variant="s1">{currentValue}</Typography>
-      <Counter onPress={() => onChange('add')}>{icon2}</Counter>
+      <Counter onPress={handleAddPress}>{icon2}</Counter>
     </Container>
   )
 }

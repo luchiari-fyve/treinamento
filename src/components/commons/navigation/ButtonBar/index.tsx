@@ -14,7 +14,7 @@ export const ButtonBar: React.FC = () => {
   const insets = useSafeAreaInsets()
 
   return (
-    <Container paddingBottom={insets.bottom + 8}>
+    <Container paddingBottom={insets.bottom}>
       <ButtonBarButton icon={<ProductListSVG />} buttonLabel="Listagem" />
       <ButtonBarButton icon={<OrderListSVG />} buttonLabel="Pedidos" />
     </Container>

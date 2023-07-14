@@ -11,11 +11,16 @@ import theme from '@global/theme'
 interface Props {
   label: string
   onPress: () => void
+  disabled?: boolean
 }
 
-export const ContinueButton: React.FC<Props> = ({ label, onPress }) => {
+export const ContinueButton: React.FC<Props> = ({
+  label,
+  onPress,
+  disabled
+}) => {
   return (
-    <Container onPress={onPress}>
+    <Container onPress={onPress} disabled={disabled}>
       <Typography variant="s2" color={theme.colors.white}>
         {label}
       </Typography>

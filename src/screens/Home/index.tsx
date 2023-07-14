@@ -125,7 +125,6 @@ export const Home: React.FC = navigation => {
 
       <ShoppingCart />
       <ButtonBar />
-      <BottomBar></BottomBar>
     </Container>
   )
 }

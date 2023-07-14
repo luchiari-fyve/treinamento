@@ -10,20 +10,28 @@ import { ProductScreenRouteProp } from '@routes/types/routeProps'
 import { useRoute } from '@react-navigation/native'
 import { FlatList } from 'react-native-gesture-handler'
 
-export const SizeCarousel: React.FC = () => {
-  const { params } = useRoute<ProductScreenRouteProp>()
-  const [selectedSize, setSelectedSize] = useState(null)
+interface Props {
+  chosenSize: string
+  onChange: (size: string) => void
+}
 
+export const SizeCarousel: React.FC<Props> = ({ chosenSize, onChange }) => {
+  // Hooks
+  const { params } = useRoute<ProductScreenRouteProp>()
+
+  // States
+  const [productSize, setProductSize] = useState(chosenSize)
+
+  // Functions
   function handleSizeClick(size: any) {
-    if (selectedSize === size) {
-      setSelectedSize(null)
-    } else {
-      setSelectedSize(size)
+    if (productSize !== size) {
+      setProductSize(size)
+      onChange(size)
     }
   }
 
   function renderSize({ item }: any) {
-    const isSelected = selectedSize === item
+    const isSelected = productSize === item
     return (
       <SizeContainer
         activeOpacity={0.6}

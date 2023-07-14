@@ -19,22 +19,28 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { addProductInCart } from '@services/api/routes/products/addProductInCart'
 import { ICartProductBackend } from '@services/api/routes/products/getProductsInCart/types'
 import { ActivityIndicator } from 'react-native'
+import { USER_ID } from '@utils/constants/user'
 
-export const ProductOrderBar: React.FC = () => {
+interface Props {
+  size: string
+}
+
+export const ProductOrderBar: React.FC<Props> = ({ size }) => {
+  // Hooks
   const { params } = useRoute<ProductScreenRouteProp>()
-  const [isLoading, setIsLoading] = useState(false)
-
-  const [counter, setCounter] = useState(1)
-
-  const cartContext = useCartContext()
-
   const navigation = useNavigation<NavigationProps>()
 
+  // States
+  const [isLoading, setIsLoading] = useState(false)
+  const [counter, setCounter] = useState(1)
+
+  // Variables
   const handledPrice = calculateDiscountIfExists(params.product)
 
-  const price = params.product.price
+  // Safe Area
   const insets = useSafeAreaInsets()
 
+  // Functions
   function handleQuantityChange(type: 'add' | 'remove') {
     if (type === 'add') {
       setCounter(counter + 1)
@@ -50,25 +56,24 @@ export const ProductOrderBar: React.FC = () => {
     return 'Adicionar'
   }
 
+  // Async functions
   async function handleProductAddition() {
     try {
       const cartProduct: ICartProductBackend = {
-        productQuantity: counter,
-        selectedSize: '',
+        productQuantity: Number(counter),
+        selectedSize: size,
         active: true,
         idProduct: params.product.id,
-        idUser: '17',
+        idUser: USER_ID,
         itemName: params.product.itemName,
         price: params.product.price,
         productImage: params.product.mainImageUrl
       }
-
-      // cartContext.addProduct(cartProduct, counter)
-      // console.log(cartProduct.selectedSize)
       setIsLoading(true)
+
       // Request
-      const response = await addProductInCart(cartProduct)
-      console.log(response)
+      await addProductInCart(cartProduct)
+
       navigation.navigate('Home')
     } catch (e) {
       console.log('[handleProductAddition]: ', e)
@@ -89,6 +94,7 @@ export const ProductOrderBar: React.FC = () => {
         buttonLabel={handleAddButton()}
         price={handledPrice * counter}
         onPress={handleProductAddition}
+        disabled={!size}
       />
     </Container>
   )
